@@ -8,7 +8,7 @@ namespace Graphs
     {
         private int[,] _graph;
         private int _size;
-        bool _visited 
+        bool _visited;
         public Graph(int size)
         {
             this._size = size;
@@ -54,6 +54,6 @@ namespace Graphs
             return res;
         }
         public int GetSize() { return this._size; }
-        
+
     }
 }
