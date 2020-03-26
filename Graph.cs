@@ -17,7 +17,7 @@ namespace Graphs
         public void AddEdge(int src, int dst, int weight = 1, bool directed = true)
         {
             _graph[src, dst] = weight;
-            if(!directed)
+            if (!directed)
             {
                 _graph[dst, src] = weight;
             }
@@ -32,7 +32,11 @@ namespace Graphs
         }
         public bool IsEdge(int src, int dst)
         {
-            return _graph[src, dst] != 0;
+            if (src < _size && dst < _size)
+            {
+                return _graph[src, dst] != 0;
+            }
+            return false;
         }
         public int[] GetEdges(int src)
         {
@@ -45,7 +49,7 @@ namespace Graphs
             count = 0;
             for (int i = 0; i < _size; i++)
             {
-                if(IsEdge(src, i))
+                if (IsEdge(src, i))
                 {
                     res[count] = i;
                     count++;
@@ -54,6 +58,21 @@ namespace Graphs
             return res;
         }
         public int GetSize() { return this._size; }
+
+        public int GetWeight(int src, int dst)
+        {
+            if (src < _size && dst < _size)
+            {
+                return _graph[src, dst];
+            }
+            return int.MaxValue;
+        }
+        public void SetWeight(int src, int dst, int weight)
+        {
+            _graph[src, dst] = weight;
+        }
+
+
 
     }
 }
