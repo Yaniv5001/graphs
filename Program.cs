@@ -107,101 +107,55 @@ namespace Graphs
             int size = G.GetSize();
             
             List<int> S = new List<int>();
+            int[] minDist = new int[size];
+            for (int i = 0; i < minDist.Length; i++)
+            {
+                minDist[i] = int.MaxValue;
+            }
             int[] dist = new int[size];
             int[] prev = new int[size];
             int u = source;
             for (int i = 0; i < size; i++)
             {
-                dist[i] = int.MaxValue;
-                prev[i] = -1;
+                if (G.IsEdge(u, i) && !S.Contains(i))
+                {
+                    dist[i] = G.GetWeight(u, i);
+                    minDist[i] = dist[i];
+                }
+                else
+                {
+                    dist[i] = int.MaxValue;
+                }
+                prev[i] = u;
                 S.Add(i);
             }
             dist[source] = 0;
             while (S.Count !=0)
             {
-                int[] edges = new int[size];
-                int min = int.MaxValue;
-                if (!S.Contains(u))
+                int min = int.MaxValue, v, alt;
+                for (int i = 0; i < dist.Length; i++)
                 {
-                    for (int i = 0; i < edges.Length; i++)
+                    if (min > dist[i])
                     {
-                        if (G.GetWeight(u, i) < G.GetWeight(u, min) && G.GetWeight(u, i) != 0 && S.Contains(i))
-                        {
-                            min = i;
-                        }
+                        u = dist[i];
                     }
                 }
-                else
-                {
-                    min = 0;
-                }
-                u = min;
+                int[] edges = G.GetEdges(u);
                 S.Remove(u);
-                int alt;
-                for (int i = 0; i < size; i++)
+
+                for (int i = 0; i < edges.Length; i++)
                 {
-                    if (G.IsEdge(u,i))
+                    v = edges[i];
+                    alt = dist[v] + G.GetWeight(u, v);
+                    if (alt < minDist[v])
                     {
-                        alt = dist[u] + G.GetWeight(u, i);
-                        if (alt < dist[i])
-                        {
-                            dist[i] = alt;
-                            prev[i] = u;
-                        }
+                        minDist[v] = alt;
+                        prev[v] = u;
                     }
                 }
             }
-            return new result <int[], int[]> (dist,prev);
+            return new result <int[], int[]> (minDist,prev);
         }
     }
 }
-
-/*
- 1  function Dijkstra(Graph, source):
- 2
- 3      create vertex set Q
- 4
- 5      for each vertex v in Graph:
- 6          dist[v] ← INFINITY
- 7          prev[v] ← UNDEFINED
- 8          add v to Q
-10      dist[source] ← 0
-11
-12      while Q is not empty:
-13          u ← vertex in Q with min dist[u]
-14
-15          remove u from Q 
-16
-17          for each neighbor v of u:           // only v that are still in Q
-18              alt ← dist[u] + length(u, v)
-19              if alt < dist[v]:
-20                  dist[v] ← alt 
-21                  prev[v] ← u 
-22
-23      return dist[], prev[]
- */
-
-/*
-1  procedure BFS(G, start_v) is
-2      let Q be a queue
-3      label start_v as discovered
-4      Q.enqueue(start_v)
-5      while Q is not empty do
-6          v := Q.dequeue()
-7          if v is the goal then
-8              return v
-9          for all edges from v to w in G.adjacentEdges(v) do
-10             if w is not labeled as discovered then
-11                 label w as discovered
-12                 w.parent := v
-13                 Q.enqueue(w)
- */
-
-
-
-
-
-
-
-
 
